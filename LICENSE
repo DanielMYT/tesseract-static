@@ -1,17 +1,22 @@
 The 'tesseract-static.sh' build script in this repository is licensed under the
 MIT license. The text for this license is below.
 
-The output binary produced from the script will NOT be under the same license
-as the script; it will be under the license that tesseract is covered by. The
-license for tesseract can be found online at the following URL:
+The output binaries produced from the script will NOT be under the same license
+as the script; they will retain the original license of their respective
+upstream projects.
+
+The license for tesseract can be found online at the following URL:
 
   <https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE>
+
+The authors of this script make no additional copyright claims to the output
+binaries or the upstream project(s).
 
 ===============================================================================
 
 MIT License
 
-Copyright (c) 2022 Daniel Massey
+Copyright (C) 2022-2024 Daniel Massey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
