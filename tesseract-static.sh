@@ -62,6 +62,7 @@ curl -L "${ZLIB_URL}" -o dl_zlib
 curl -L "${OPENSSL_URL}" -o dl_openssl
 curl -L "${CURL_URL}" -o dl_curl
 curl -L "${LIBPNG_URL}" -o dl_libpng
+curl -L "${LIBPNGAPNG_URL}" -o dl_libpngapng
 curl -L "${LIBJPEGTURBO_URL}" -o dl_libjpegturbo
 curl -L "${GIFLIB_URL}" -o dl_giflib
 curl -L "${LIBTIFF_URL}" -o dl_libtiff
@@ -75,6 +76,7 @@ ${ZLIB_SHA256} dl_zlib
 ${OPENSSL_SHA256} dl_openssl
 ${CURL_SHA256} dl_curl
 ${LIBPNG_SHA256} dl_libpng
+${LIBPNGAPNG_SHA256} dl_libpngapng
 ${LIBJPEGTURBO_SHA256} dl_libjpegturbo
 ${GIFLIB_SHA256} dl_giflib
 ${LIBTIFF_SHA256} dl_libtiff
@@ -86,8 +88,10 @@ ${TESSERACT_SHA256} dl_tesseract
 
 # Extract the stuff.
 for i in dl_*; do
-  mkdir "${i/dl/src}"
-  tar -xf "${i}" -C "${i/dl/src}" --strip-components=1
+  if [ "$i" != "dl_libpngapng" ]; then
+    mkdir "${i/dl/src}"
+    tar -xf "${i}" -C "${i/dl/src}" --strip-components=1
+  fi
 done
 
 # Build zlib.
@@ -113,6 +117,7 @@ popd
 
 # Build libpng.
 pushd src_libpng
+zcat ../dl_libpngapng | patch -Np1
 ./configure --prefix="${workdir}" --enable-static --disable-shared
 make
 make install
