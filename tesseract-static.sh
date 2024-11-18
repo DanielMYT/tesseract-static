@@ -186,7 +186,7 @@ set -e
 popd
 
 # Strip unneeded symbols from the resulting binary.
-strip src_tesseract/tesseract
+$(${CC} -print-prog-name=strip) --strip-all src_tesseract/tesseract
 
 # Move binary to the final location and clean up.
 install -t "${savedir}" -Dm755 src_tesseract/tesseract
