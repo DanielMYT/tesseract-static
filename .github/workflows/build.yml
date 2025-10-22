@@ -83,8 +83,8 @@ jobs:
           files: |
             tesseract.aarch64
             tesseract.x86_64
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clean up artifact cache after release
         uses: geekyeggo/delete-artifact@v5
