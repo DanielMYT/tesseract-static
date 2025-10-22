@@ -1,3 +1,5 @@
 workdir
 tesseract
+tesseract.aarch64
+tesseract.x86_64
 toolchain

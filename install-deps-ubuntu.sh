@@ -12,6 +12,9 @@ if test $EUID -ne 0; then
   exit 1
 fi
 
+# Prevent any interactive dialogs from DPKG.
+export DEBIAN_FRONTEND=noninteractive
+
 # Update repositories.
 apt-get update
 

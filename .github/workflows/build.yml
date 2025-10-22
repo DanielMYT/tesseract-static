@@ -1,0 +1,95 @@
+name: Build tesseract static binaries
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Build x86_64 binary
+        run: |
+          sudo ./install-deps-ubuntu.sh
+          ./get-toolchain.sh
+          CC="${PWD}/toolchain/bin/x86_64-linux-musl-gcc" CXX="${PWD}/toolchain/bin/x86_64-linux-musl-g++" ./tesseract-static.sh
+
+      - name: Upload x86_64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tesseract.x86_64
+          path: tesseract.x86_64
+          retention-days: 1
+
+  buildarm:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Build aarch64 binary
+        run: |
+          sudo ./install-deps-ubuntu.sh
+          ./get-toolchain.sh
+          CC="${PWD}/toolchain/bin/aarch64-linux-musl-gcc" CXX="${PWD}/toolchain/bin/aarch64-linux-musl-g++" ./tesseract-static.sh
+
+      - name: Upload aarch64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tesseract.aarch64
+          path: tesseract.aarch64
+          retention-days: 1
+
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - buildarm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Download x86_64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: tesseract.x86_64
+          path: .
+
+      - name: Download aarch64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: tesseract.aarch64
+          path: .
+
+      - name: Generate release notes
+        run: |
+          ./gen-rel-notes.sh > releasenotes.md
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: releasenotes.md
+          files: |
+            tesseract.aarch64
+            tesseract.x86_64
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean up artifact cache after release
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            tesseract.aarch64
+            tesseract.x86_64
+          failOnError: false

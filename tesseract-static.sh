@@ -183,7 +183,7 @@ popd
 $(${CC} -print-prog-name=strip) --strip-all src_tesseract/tesseract
 
 # Move binary to the final location and clean up.
-install -Dm755 src_tesseract/tesseract "${savedir}"/tesseract
+install -Dm755 src_tesseract/tesseract "${savedir}"/tesseract."$(uname -m)"
 popd
 rm -rf "${workdir}"
 

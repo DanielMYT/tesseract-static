@@ -1,10 +1,12 @@
 # tesseract-static
-Statically linked Tesseract OCR binary for Linux x86_64 (and anything else people port it to).
+Statically linked Tesseract OCR binary for Linux x86_64 and aarch64.
 
 # Downloading
 Download the latest 'tesseract' binary from [the releases page](https://github.com/DanielMYT/tesseract-static/releases), make it executable (`chmod +x tesseract`), and run it with `./tesseract`.
 
-Note that in order to use the binary you will most likely need training data. This can be obtained from https://github.com/tesseract-ocr/tessdata. Consult the tesseract documenation for more information.
+Note that as of the (recent) addition of aarch64 support, the released binaries are now named `tesseract.x86_64` and `tesseract.aarch64` respectively. You will need to update your workflows to handle this. You can rename the downloaded binary back to `tesseract` (without the architecture file extension) if desired.
+
+Note also that in order to use the binary you will most likely need training data. This can be obtained from https://github.com/tesseract-ocr/tessdata. Consult the tesseract documenation for more information.
 
 The binary does not have a hardcoded tessdata path; it assumes the tessdata is in the same directory as the binary is executed from.
 
