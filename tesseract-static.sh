@@ -171,35 +171,19 @@ cd ..
 popd
 
 # Build tesseract.
+# NOTE: Hacky workaround has now been replaced with a toolchain hack.
+# NOTE: See README.md for details.
 pushd src_tesseract
 ./autogen.sh
 ./configure --prefix="${workdir}" --enable-static --disable-shared --disable-doc --disable-tessdata-prefix --without-archive
-# We might need to link tesseract ourselves, the included libtool is buggy.
-# TODO: Try and fix this in the build system. This workaround is horrible.
-set +e
 make
-MAKE_RETURN=$?
-if [ $MAKE_RETURN -ne 0 ] && [ -e ./.libs/libtesseract.a ]; then
-  echo "Looks like the final link failed, lets try linking it ourselves..." >&2
-  ${CXX} $(grep -- "CXXFLAGS = ${CXXFLAGS}" Makefile | cut -d= -f2-) $(grep -q -- -fopenmp Makefile && echo '-fopenmp') -o tesseract src/tesseract-tesseract.o ${LDFLAGS} ./.libs/libtesseract.a -lleptonica -lpng16 -lgif -ltiff -ljpeg -lwebp -lwebpmux -lsharpyuv -lm -lcurl -lssl -lcrypto -lz -lrt
-  if [ $? -ne 0 ]; then
-    echo "...nope, sorry. :(" >&2
-    exit $MAKE_RETURN
-  else
-    echo "...and that seems to have worked (fingers crossed)!" >&2
-  fi
-else
-  exit $MAKE_RETURN
-fi
-# Lets pretend that didn't have to happen and continue on...
-set -e
 popd
 
 # Strip unneeded symbols from the resulting binary.
 $(${CC} -print-prog-name=strip) --strip-all src_tesseract/tesseract
 
 # Move binary to the final location and clean up.
-install -t "${savedir}" -Dm755 src_tesseract/tesseract
+install -Dm755 src_tesseract/tesseract "${savedir}"/tesseract
 popd
 rm -rf "${workdir}"
 
