@@ -8,7 +8,7 @@ Note that as of the (recent) addition of aarch64 support, the released binaries 
 
 Note also that in order to use the binary you will most likely need training data. This can be obtained from https://github.com/tesseract-ocr/tessdata. Consult the tesseract documenation for more information.
 
-The binary does not have a hardcoded tessdata path; it assumes the tessdata is in the same directory as the binary is executed from.
+The binary does not have a hardcoded tessdata path; it assumes the tessdata is in the same directory as the binary is executed from. You can alternatively set the `TESSDATA_PREFIX` environment variable, if your tessdata is located in a different location to the tesseract binary.
 
 # Compiling
 You will need a static cross Musl GCC toolchain. We recommend using the included `get-toolchain.sh` script, which will download one for you. See the commands below for more information.
