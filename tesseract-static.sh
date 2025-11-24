@@ -112,7 +112,7 @@ popd
 
 # Build OpenSSL.
 pushd src_openssl
-./config --prefix="${workdir}" --libdir=lib no-shared
+./config --prefix="${workdir}" --libdir=lib no-docs no-shared
 make
 make install
 popd
