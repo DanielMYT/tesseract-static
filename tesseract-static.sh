@@ -148,8 +148,7 @@ popd
 
 # Build libtiff.
 pushd src_libtiff
-./autogen.sh
-./configure --prefix="${workdir}" --enable-static --disable-shared
+./configure --prefix="${workdir}" --enable-static --disable-shared --disable-docs --disable-tests --disable-tools
 make
 make install
 popd
@@ -188,6 +187,6 @@ popd
 rm -rf "${workdir}"
 
 # Finishing message.
-echo "The tesseract binary was successfully built."
+echo "The tesseract binary was successfully built (tesseract.$(uname -m))."
 echo "Note that it is not be covered by the same license as this script."
 echo "See the 'LICENSE' document in the source tree for more details."
