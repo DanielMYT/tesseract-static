@@ -68,8 +68,12 @@ export MAKEFLAGS="-j$(nproc)"
 
 # Download the stuff.
 curl -fL "${ZLIB_URL}" -o dl_zlib
+curl -fL "${BZIP2_URL}" -o dl_bzip2
+curl -fL "${XZ_URL}" -o dl_xz
+curl -fL "${ZSTD_URL}" -o dl_zstd
 curl -fL "${OPENSSL_URL}" -o dl_openssl
 curl -fL "${CURL_URL}" -o dl_curl
+curl -fL "${LIBARCHIVE_URL}" -o dl_libarchive
 curl -fL "${LIBPNG_URL}" -o dl_libpng
 curl -fL "${LIBPNGAPNG_URL}" -o dl_libpngapng
 curl -fL "${LIBJPEGTURBO_URL}" -o dl_libjpegturbo
@@ -82,8 +86,12 @@ curl -fL "${TESSERACT_URL}" -o dl_tesseract
 # Prepare the checksum list.
 echo "
 ${ZLIB_SHA256} dl_zlib
+${BZIP2_SHA256} dl_bzip2
+${XZ_SHA256} dl_xz
+${ZSTD_SHA256} dl_zstd
 ${OPENSSL_SHA256} dl_openssl
 ${CURL_SHA256} dl_curl
+${LIBARCHIVE_SHA256} dl_libarchive
 ${LIBPNG_SHA256} dl_libpng
 ${LIBPNGAPNG_SHA256} dl_libpngapng
 ${LIBJPEGTURBO_SHA256} dl_libjpegturbo
@@ -110,6 +118,26 @@ make
 make install
 popd
 
+# Build bzip2.
+pushd src_bzip2
+make CC="${CC}" AR="$(${CC} -print-prog-name=ar)" RANLIB="$(${CC} -print-prog-name=ranlib)" CFLAGS="${CFLAGS}" LDFLAGS="${LDFLAGS}"
+make PREFIX="${workdir}" install
+popd
+
+# Build XZ.
+pushd src_xz
+./configure --prefix="${workdir}" --enable-static --disable-shared --disable-doc
+make
+make install
+popd
+
+# Build zstd.
+pushd src_zstd
+make prefix="${workdir}"
+make prefix="${workdir}" install
+rm -f "${workdir}"/lib/libzstd.so*
+popd
+
 # Build OpenSSL.
 pushd src_openssl
 ./config --prefix="${workdir}" --libdir=lib no-docs no-shared
@@ -120,6 +148,13 @@ popd
 # Build curl.
 pushd src_curl
 ./configure --prefix="${workdir}" --enable-static --disable-shared --disable-docs --enable-threaded-resolver --without-libpsl --with-openssl --with-ca-path=/etc/ssl/certs
+make
+make install
+popd
+
+# Build libarchive.
+pushd src_libarchive
+./configure --prefix="${workdir}" --enable-static --disable-shared --disable-bsdcat --disable-bsdcpio --disable-bsdtar --disable-bsdunzip --without-expat --without-lz4 --without-xml2
 make
 make install
 popd
@@ -174,15 +209,29 @@ popd
 # NOTE: See README.md for details.
 pushd src_tesseract
 ./autogen.sh
-./configure --prefix="${workdir}" --enable-static --disable-shared --disable-doc --disable-tessdata-prefix --without-archive
+./configure --prefix="${workdir}" --enable-static --disable-shared --disable-doc --disable-tessdata-prefix
 make
 popd
 
 # Strip unneeded symbols from the resulting binary.
 $(${CC} -print-prog-name=strip) --strip-all src_tesseract/tesseract
 
+# Install licenses. Tesseract first and then everything else.
+
+while read -r lic; do
+  licfile=""
+  if test "$(echo "${lic}" | cut -d/ -f1)" = "src_tesseract"; then
+    licfile="tesseract"
+  else
+    licfile="libraries"
+  fi
+  echo "=== ${lic/src_/} ===" >> "license.${licfile}.txt"
+  cat "${lic}" >> "license.${licfile}.txt"
+done < <(find src_* -maxdepth 1 -name COPYING\* -o -name LICENSE\* | sort)
+
 # Move binary to the final location and clean up.
 install -Dm755 src_tesseract/tesseract "${savedir}"/tesseract."$(uname -m)"
+cp license.{tesseract,libraries}.txt "${savedir}"
 popd
 rm -rf "${workdir}"
 

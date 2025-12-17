@@ -27,6 +27,20 @@ jobs:
           path: tesseract.x86_64
           retention-days: 1
 
+      - name: Upload tesseract license file
+        uses: actions/upload-artifact@v4
+        with:
+          name: license.tesseract.txt
+          path: license.tesseract.txt
+          retention-days: 1
+
+      - name: Upload libraries license file
+        uses: actions/upload-artifact@v4
+        with:
+          name: license.libraries.txt
+          path: license.libraries.txt
+          retention-days: 1
+
   buildarm:
     runs-on: ubuntu-24.04-arm
 
@@ -69,6 +83,18 @@ jobs:
           name: tesseract.aarch64
           path: .
 
+      - name: Download tesseract license file
+        uses: actions/download-artifact@v4
+        with:
+          name: license.tesseract.txt
+          path: .
+
+      - name: Download libraries license file
+        uses: actions/download-artifact@v4
+        with:
+          name: license.libraries.txt
+          path: .
+
       - name: Generate release notes
         run: |
           ./gen-rel-notes.sh > releasenotes.md
@@ -83,6 +109,8 @@ jobs:
           files: |
             tesseract.aarch64
             tesseract.x86_64
+            license.tesseract.txt
+            license.libraries.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -92,4 +120,6 @@ jobs:
           name: |
             tesseract.aarch64
             tesseract.x86_64
+            license.tesseract.txt
+            license.libraries.txt
           failOnError: false

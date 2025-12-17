@@ -22,8 +22,12 @@ Compiled using version **${TOOLCHAIN_VER}** of the toolchain available from http
 Statically linked with the following library versions:
 
 - zlib: **${ZLIB_VER}**
+- bzip2: **${BZIP2_VER}**
+- xz: **${XZ_VER}**
+- zstd: **${ZSTD_VER}**
 - openssl: **${OPENSSL_VER}**
 - curl: **${CURL_VER}**
+- libarchive: **${LIBARCHIVE_VER}**
 - libpng: **${LIBPNG_VER}**
 - libjpeg-turbo: **${LIBJPEGTURBO_VER}**
 - giflib: **${GIFLIB_VER}**
@@ -31,5 +35,5 @@ Statically linked with the following library versions:
 - libwebp: **${LIBWEBP_VER}**
 - leptonica: **${LEPTONICA_VER}**
 
-The tesseract binaries are **NOT** under the same license as the scripts in this repository. Please visit https://github.com/tesseract-ocr/tesseract/blob/main/LICENSE to view the license for tesseract. The author(s) of the scripts in this repository make no additional claims of copyright over the produced binaries nor the upstream tesseract project.
+The license for the tesseract binaries can be found in the \`license.tesseract.txt\` asset available on this release. Similarly, the license for all third party libraries which were statically linked into the binaries can be found in \`license.libraries.txt\`. The author(s) of the scripts in this repository make no additional claims of copyright over the produced binaries, the static libraries linked into them, nor the upstream projects they originate from.
 END

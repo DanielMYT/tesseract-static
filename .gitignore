@@ -1,5 +1,7 @@
-workdir
+license.tesseract.txt
+license.libraries.txt
 tesseract
 tesseract.aarch64
 tesseract.x86_64
 toolchain
+workdir

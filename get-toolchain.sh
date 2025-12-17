@@ -51,9 +51,13 @@ mkdir "${tcdir}"
 curl -L https://github.com/DanielMYT/musl-cross-make-nightly/releases/download/nightly-"${TOOLCHAIN_VER}"/"$(uname -m)"-linux-musl-toolchain.tar.xz -o "${tcdir}"/dl_tc
 
 # Verify checksum.
+echo
+echo "Verifying integrity of downloaded toolchain..."
 echo "${TOOLCHAIN_SHA256} ${tcdir}/dl_tc" | sha256sum -c
 
 # Extract it.
+echo
+echo "Extracting toolchain..."
 tar -xf "${tcdir}"/dl_tc -C "${tcdir}" --strip-components=1
 
 # Report about applying the toolchain hack.
