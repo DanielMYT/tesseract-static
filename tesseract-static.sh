@@ -67,21 +67,21 @@ export PATH="${workdir}/bin:${PATH}"
 export MAKEFLAGS="-j$(nproc)"
 
 # Download the stuff.
-curl -fL "${ZLIB_URL}" -o dl_zlib
-curl -fL "${BZIP2_URL}" -o dl_bzip2
-curl -fL "${XZ_URL}" -o dl_xz
-curl -fL "${ZSTD_URL}" -o dl_zstd
-curl -fL "${OPENSSL_URL}" -o dl_openssl
-curl -fL "${CURL_URL}" -o dl_curl
-curl -fL "${LIBARCHIVE_URL}" -o dl_libarchive
-curl -fL "${LIBPNG_URL}" -o dl_libpng
-curl -fL "${LIBPNGAPNG_URL}" -o dl_libpngapng
-curl -fL "${LIBJPEGTURBO_URL}" -o dl_libjpegturbo
-curl -fL "${GIFLIB_URL}" -o dl_giflib
-curl -fL "${LIBTIFF_URL}" -o dl_libtiff
-curl -fL "${LIBWEBP_URL}" -o dl_libwebp
-curl -fL "${LEPTONICA_URL}" -o dl_leptonica
-curl -fL "${TESSERACT_URL}" -o dl_tesseract
+curl -fkL "${ZLIB_URL}" -o dl_zlib
+curl -fkL "${BZIP2_URL}" -o dl_bzip2
+curl -fkL "${XZ_URL}" -o dl_xz
+curl -fkL "${ZSTD_URL}" -o dl_zstd
+curl -fkL "${OPENSSL_URL}" -o dl_openssl
+curl -fkL "${CURL_URL}" -o dl_curl
+curl -fkL "${LIBARCHIVE_URL}" -o dl_libarchive
+curl -fkL "${LIBPNG_URL}" -o dl_libpng
+curl -fkL "${LIBPNGAPNG_URL}" -o dl_libpngapng
+curl -fkL "${LIBJPEGTURBO_URL}" -o dl_libjpegturbo
+curl -fkL "${GIFLIB_URL}" -o dl_giflib
+curl -fkL "${LIBTIFF_URL}" -o dl_libtiff
+curl -fkL "${LIBWEBP_URL}" -o dl_libwebp
+curl -fkL "${LEPTONICA_URL}" -o dl_leptonica
+curl -fkL "${TESSERACT_URL}" -o dl_tesseract
 
 # Prepare the checksum list.
 echo "
