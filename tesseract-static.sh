@@ -80,6 +80,7 @@ curl -fkL "${LIBJPEGTURBO_URL}" -o dl_libjpegturbo
 curl -fkL "${GIFLIB_URL}" -o dl_giflib
 curl -fkL "${LIBTIFF_URL}" -o dl_libtiff
 curl -fkL "${LIBWEBP_URL}" -o dl_libwebp
+curl -fkL "${OPENJPEG_URL}" -o dl_openjpeg
 curl -fkL "${LEPTONICA_URL}" -o dl_leptonica
 curl -fkL "${TESSERACT_URL}" -o dl_tesseract
 
@@ -98,6 +99,7 @@ ${LIBJPEGTURBO_SHA256} dl_libjpegturbo
 ${GIFLIB_SHA256} dl_giflib
 ${LIBTIFF_SHA256} dl_libtiff
 ${LIBWEBP_SHA256} dl_libwebp
+${OPENJPEG_SHA256} dl_openjpeg
 ${LEPTONICA_SHA256} dl_leptonica
 ${TESSERACT_SHA256} dl_tesseract
 " | sha256sum -c
@@ -169,7 +171,7 @@ popd
 
 # Build libjpeg-turbo.
 pushd src_libjpegturbo
-cmake -DCMAKE_INSTALL_PREFIX="${workdir}" -DCMAKE_BUILD_TYPE=MinSizeRel -DENABLE_STATIC=TRUE -DENABLE_SHARED=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -Wno-dev -B build
+cmake -DCMAKE_INSTALL_PREFIX="${workdir}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=MinSizeRel -DENABLE_STATIC=TRUE -DENABLE_SHARED=FALSE -DCMAKE_INSTALL_DEFAULT_LIBDIR=lib -Wno-dev -B build
 make -C build
 make -C build install
 popd
@@ -196,9 +198,16 @@ make
 make install
 popd
 
+# Build OpenJPEG.
+pushd src_openjpeg
+cmake -DCMAKE_INSTALL_PREFIX="${workdir}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF -DBUILD_CODEC=OFF -Wno-dev -B build
+make -C build
+make -C build install
+popd
+
 # Build leptonica.
 pushd src_leptonica
-./configure --prefix="${workdir}" --enable-static --disable-shared --without-libopenjpeg
+./configure --prefix="${workdir}" --enable-static --disable-shared
 make
 make install
 cd ..

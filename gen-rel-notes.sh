@@ -33,6 +33,7 @@ Statically linked with the following library versions:
 - giflib: **${GIFLIB_VER}**
 - libtiff: **${LIBTIFF_VER}**
 - libwebp: **${LIBWEBP_VER}**
+- openjpeg: **${OPENJPEG_VER}**
 - leptonica: **${LEPTONICA_VER}**
 
 The license for the tesseract binaries can be found in the \`license.tesseract.txt\` asset available on this release. Similarly, the license for all third party libraries which were statically linked into the binaries can be found in \`license.libraries.txt\`. The author(s) of the scripts in this repository make no additional claims of copyright over the produced binaries, the static libraries linked into them, nor the upstream projects they originate from.
