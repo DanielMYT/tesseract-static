@@ -8,7 +8,9 @@ Note that as of the (recent) addition of aarch64 support, the released binaries 
 
 Note also that in order to use the binary you will most likely need training data. This can be obtained from https://github.com/tesseract-ocr/tessdata. Consult the tesseract documenation for more information.
 
-The binary does not have a hardcoded tessdata path; it assumes the tessdata is in the same directory as the binary is executed from. You can alternatively set the `TESSDATA_PREFIX` environment variable, if your tessdata is located in a different location to the tesseract binary.
+The binary does not have a hardcoded tessdata path; it assumes the tessdata is in the current working directory when the binary is executed. If your tessdata is located somewhere else, you can set/export the `TESSDATA_PREFIX` environment variable to the directory containing your tessdata, which informs the program of where to find it.
+
+If you are unsure on how to use tesseract, it is recommended that you read the manual page, which is not included in this distribution, but can be found online at https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc.
 
 # Compiling
 You will need a static cross Musl GCC toolchain. We recommend using the included `get-toolchain.sh` script, which will download one for you. See the commands below for more information.
@@ -28,9 +30,11 @@ The script may take a while to run but after it finishes you should have the `te
 
 Please note that there is a flaw in the tesseract build system that under normal circumstances causes it to throw an error when at the link of the final executable when static linking. This happens because the build system tries to forcibly link against `libstdc++.so` (shared library), even when static linking is explicitly requested (which should link to `libstdc++.a`). Previously this issue was fixed by an extremely hacky workaround in the build script. However, we now apply a slightly cleaner hack as part of the toolchain retrival (`get-toolchain.sh`) instead. As a result, we recommend using the toolchain downloaded from `get-toolchain.sh` for building `tesseract-static`, and **NOT** attempting to use your own toolchain. The older extremely-hacky-workaround has been removed from the build script.
 
+The GitHub Actions workflow used to build the binaries released on this repository, can be found [here](https://github.com/DanielMYT/tesseract-static/blob/main/.github/workflows/build.yml).
+
 # Why is this needed?
-If you are developing a program incorporating text-in-image recognition which makes use of the Tesseract C/C++ API, you won't need this.
+If you are developing a program incorporating text-in-image recognition which makes use of the Tesseract C/C++ API, you won't need this. This is because this project is not a distribution of the tesseract library, but rather the tesseract program itself.
 
 However if your program is written in Python and you are using the [pytesseract](https://pypi.org/project/pytesseract) module, this could be useful since it requires a `tesseract` binary which may not be available in limited environments such as containers.
 
-Or if you're not a developer at all but need Tesseract for some reason, this could be useful for you. It even works on broken systems that don't have a working C library, since it's completely statically linked.
+Or if you're not a developer at all but need Tesseract for some reason, this could be useful for you. It even works on broken systems that don't have a working C library, since it's completely statically linked. Furthermore, as it is _not_ an AppImage, it does _not_ require FUSE 2 to be installed on the host system, and nor does it have any host Glibc minimum version requirement.
