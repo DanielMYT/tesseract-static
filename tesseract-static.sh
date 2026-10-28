@@ -207,6 +207,7 @@ popd
 
 # Build leptonica.
 pushd src_leptonica
+test -e LICENSE || ln -sf leptonica-license.txt LICENSE
 ./configure --prefix="${workdir}" --enable-static --disable-shared
 make
 make install
@@ -236,7 +237,7 @@ while read -r lic; do
   fi
   echo "=== ${lic/src_/} ===" >> "license.${licfile}.txt"
   cat "${lic}" >> "license.${licfile}.txt"
-done < <(find src_* -maxdepth 1 -name COPYING\* -o -name LICENSE\* | sort)
+done < <(find src_* -maxdepth 1 -type f,l \( -name COPYING\* -o -name LICENSE\* \) | sort)
 
 # Move binary to the final location and clean up.
 install -Dm755 src_tesseract/tesseract "${savedir}"/tesseract."$(uname -m)"
